@@ -8,6 +8,10 @@ import { UsersModule } from './users/users.module';
   imports: [
     MongooseModule.forRoot(
       'mongodb+srv://rajatsonisoni77_db_user:qB1mPxKo4F2aaYcO@cluster0.amdmaxd.mongodb.net/?appName=Cluster0',
+      {
+        retryAttempts: 5,
+        retryDelay: 3000,
+      },
     ),
     UsersModule,
   ],
