@@ -10,6 +10,7 @@ import { ClassesModule } from './classes/classes.module';
 import { SubjectsModule } from './subjects/subjects.module';
 import { HomeworkModule } from './homework/homework.module';
 import { MarksModule } from './marks/marks.module';
+import { NoticeModule } from './notice/notice.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MarksModule } from './marks/marks.module';
     SubjectsModule,
     HomeworkModule,
     MarksModule,
+    NoticeModule,
   ],
 })
 export class AppModule {}
