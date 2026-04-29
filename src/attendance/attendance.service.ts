@@ -11,27 +11,49 @@ export class AttendanceService {
   ) {}
 
   async markAttendance(data: any) {
-    const { studentId, teacherId, status, date } = data;
+    const { teacherId, date, students } = data;
 
-    const exists = await this.attendanceModel.findOne({
-      studentId,
-      date,
-    });
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
 
-    if (exists) {
-      return this.attendanceModel.findOneAndUpdate(
-        { studentId, date },
-        { status },
-        { new: true },
-      );
-    }
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
 
-    return this.attendanceModel.create({
-      studentId: new Types.ObjectId(studentId),
-      teacherId: new Types.ObjectId(teacherId),
-      status,
-      date,
-    });
+    const operations = students.map((student: any) => ({
+      updateOne: {
+        filter: {
+          studentId: new Types.ObjectId(student.studentId),
+          date: { $gte: start, $lte: end },
+        },
+        update: {
+          studentId: new Types.ObjectId(student.studentId),
+          teacherId: new Types.ObjectId(teacherId),
+          status: student.status,
+          date: new Date(date),
+        },
+        upsert: true,
+      },
+    }));
+
+    // ✅ bulk write
+    await this.attendanceModel.bulkWrite(operations);
+
+    // ✅ fetch with student + teacher
+    const result = await this.attendanceModel
+      .find({
+        teacherId: new Types.ObjectId(teacherId),
+        date: { $gte: start, $lte: end },
+      })
+      .populate({
+        path: 'studentId',
+        select: 'name className',
+      })
+      .populate({
+        path: 'teacherId',
+        select: 'name', // ✅ teacher name
+      });
+
+    return result;
   }
 
   //   async getAttendance(teacherId: string, date: string) {
