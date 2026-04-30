@@ -15,6 +15,8 @@ import { RegisterModule } from './register/register.module';
 import { RelationModule } from './relation/relation.module';
 import { SchoolModule } from './school/school.module';
 import { LeaveModule } from './leave/leave.module';
+import { ComplaintCategoryModule } from './complaint-category/complaint-category.module';
+import { ComplaintModule } from './complaint/complaint.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { LeaveModule } from './leave/leave.module';
     RelationModule,
     SchoolModule,
     LeaveModule,
+    ComplaintCategoryModule,
+    ComplaintModule,
   ],
 })
 export class AppModule {}
