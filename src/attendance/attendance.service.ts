@@ -55,23 +55,6 @@ export class AttendanceService {
 
     return result;
   }
-
-  //   async getAttendance(teacherId: string, date: string) {
-  //     return this.attendanceModel
-  //       .find({
-  //         teacherId: new Types.ObjectId(teacherId),
-  //         date,
-  //       })
-  //       .populate('studentId', 'name className');
-  //   }
-  //   async getAttendance(teacherId: string, date: string) {
-  //     console.log('INPUT 👉', teacherId, date);
-
-  //     const data = await this.attendanceModel.find();
-  //     console.log('DB DATA 👉', data);
-
-  //     return data;
-  //   }
   async getAttendance(teacherId: string, date: string) {
     const start = new Date(date);
     start.setHours(0, 0, 0, 0);
@@ -86,11 +69,81 @@ export class AttendanceService {
       })
       .populate({
         path: 'studentId',
-        select: 'name className', // ✅ student info
+        select: 'name className',
       })
       .populate({
         path: 'teacherId',
-        select: 'name email schoolName', // ✅ teacher info
+        select: 'name email schoolName',
       });
+  }
+
+  async getStudentMonthlyAttendance(
+    studentId: string,
+    month: string,
+    year: number,
+  ) {
+    if (!Types.ObjectId.isValid(studentId)) {
+      throw new Error('Invalid studentId');
+    }
+    const monthMap: any = {
+      jan: 0,
+      feb: 1,
+      mar: 2,
+      apr: 3,
+      may: 4,
+      jun: 5,
+      jul: 6,
+      aug: 7,
+      sep: 8,
+      oct: 9,
+      nov: 10,
+      dec: 11,
+    };
+    const monthIndex = monthMap[month.toLowerCase()];
+
+    if (monthIndex === undefined) {
+      throw new Error('Invalid month');
+    }
+
+    const start = new Date(year, monthIndex, 1);
+    const end = new Date(year, monthIndex + 1, 0, 23, 59, 59);
+
+    const result = await this.attendanceModel.aggregate([
+      {
+        $match: {
+          studentId: new Types.ObjectId(studentId),
+          date: { $gte: start, $lte: end },
+        },
+      },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    let present = 0;
+    let absent = 0;
+
+    result.forEach((item) => {
+      if (item._id === 'present') present = item.count;
+      if (item._id === 'absent') absent = item.count;
+    });
+
+    const records = await this.attendanceModel.find({
+      studentId: new Types.ObjectId(studentId),
+      date: { $gte: start, $lte: end },
+    });
+
+    return {
+      studentId,
+      month,
+      year,
+      totalPresent: present,
+      totalAbsent: absent,
+      totalDays: present + absent,
+      records,
+    };
   }
 }

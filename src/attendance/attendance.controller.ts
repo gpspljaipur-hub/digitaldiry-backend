@@ -14,4 +14,13 @@ export class AttendanceController {
   get(@Body() body: any) {
     return this.attendanceService.getAttendance(body.teacherId, body.date);
   }
+
+  @Post('student-monthly')
+  getMonthly(@Body() body: any) {
+    return this.attendanceService.getStudentMonthlyAttendance(
+      body.studentId,
+      body.month,
+      body.year,
+    );
+  }
 }
