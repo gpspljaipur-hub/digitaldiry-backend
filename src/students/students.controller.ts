@@ -7,15 +7,22 @@ export class StudentsController {
 
   @Post('add')
   addStudent(@Body() body: any) {
-    return this.studentsService.addStudent(
-      body.name,
-      body.className,
-      body.teacherId,
-    );
+    return this.studentsService.addStudent({
+      name: body.name,
+      classId: body.classId, // ✅ changed
+      teacherId: body.teacherId,
+    });
   }
 
   @Post('list')
   getStudents(@Body('teacherId') teacherId: string) {
     return this.studentsService.getStudents(teacherId);
+  }
+
+  @Post('list-by-class')
+  getStudentsByClass(@Body() body: any) {
+    console.log('BODY 👉', body);
+
+    return this.studentsService.getStudentsByClass(body.classId);
   }
 }
