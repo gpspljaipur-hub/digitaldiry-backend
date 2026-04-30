@@ -11,6 +11,9 @@ import { SubjectsModule } from './subjects/subjects.module';
 import { HomeworkModule } from './homework/homework.module';
 import { MarksModule } from './marks/marks.module';
 import { NoticeModule } from './notice/notice.module';
+import { RegisterModule } from './register/register.module';
+import { RelationModule } from './relation/relation.module';
+import { SchoolModule } from './school/school.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { NoticeModule } from './notice/notice.module';
     HomeworkModule,
     MarksModule,
     NoticeModule,
+    RegisterModule,
+    RelationModule,
+    SchoolModule,
   ],
 })
 export class AppModule {}
