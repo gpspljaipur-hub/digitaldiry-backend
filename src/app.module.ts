@@ -14,6 +14,7 @@ import { NoticeModule } from './notice/notice.module';
 import { RegisterModule } from './register/register.module';
 import { RelationModule } from './relation/relation.module';
 import { SchoolModule } from './school/school.module';
+import { LeaveModule } from './leave/leave.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SchoolModule } from './school/school.module';
     RegisterModule,
     RelationModule,
     SchoolModule,
+    LeaveModule,
   ],
 })
 export class AppModule {}
