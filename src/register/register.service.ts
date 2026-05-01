@@ -65,4 +65,51 @@ export class RegisterService {
       .populate('schoolId', 'name')
       .populate('relationId', 'name');
   }
+
+  async updateProfile(data: any) {
+    const {
+      mobile,
+      parentName,
+      studentFullName,
+      classId,
+      schoolId,
+      relationId,
+      studentId,
+    } = data;
+
+    if (!mobile) {
+      throw new BadRequestException('mobile required');
+    }
+
+    const normalizedPhone = mobile.replace(/\D/g, '').slice(-10);
+
+    const existing = await this.registerModel.findOne({
+      mobile: normalizedPhone,
+    });
+
+    if (!existing) {
+      throw new BadRequestException('Profile not found');
+    }
+
+    const updated = await this.registerModel
+      .findOneAndUpdate(
+        { mobile: normalizedPhone },
+        {
+          parentName,
+          studentFullName,
+          classId: classId ? new Types.ObjectId(classId) : existing.classId,
+          schoolId: schoolId ? new Types.ObjectId(schoolId) : existing.schoolId,
+          relationId: relationId
+            ? new Types.ObjectId(relationId)
+            : existing.relationId,
+          studentId,
+        },
+        { new: true },
+      )
+      .populate('classId', 'name')
+      .populate('schoolId', 'name')
+      .populate('relationId', 'name');
+
+    return updated;
+  }
 }

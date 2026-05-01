@@ -14,4 +14,9 @@ export class RegisterController {
   get(@Body('mobile') mobile: string) {
     return this.registerService.getRegister(mobile);
   }
+
+  @Post('update')
+  update(@Body() body: any) {
+    return this.registerService.updateProfile(body);
+  }
 }
