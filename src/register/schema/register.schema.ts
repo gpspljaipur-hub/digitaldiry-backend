@@ -25,6 +25,12 @@ export class Register {
 
   @Prop()
   studentId!: string;
+
+  @Prop()
+  email!: string;
+
+  @Prop()
+  address!: string;
 }
 
 export const RegisterSchema = SchemaFactory.createForClass(Register);

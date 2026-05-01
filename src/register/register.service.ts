@@ -23,6 +23,8 @@ export class RegisterService {
       schoolId,
       relationId,
       studentId,
+      email,
+      address,
     } = data;
 
     if (
@@ -46,6 +48,8 @@ export class RegisterService {
       schoolId: new Types.ObjectId(schoolId),
       relationId: new Types.ObjectId(relationId),
       studentId,
+      email,
+      address,
     });
 
     await this.userModel.findOneAndUpdate(
@@ -75,6 +79,8 @@ export class RegisterService {
       schoolId,
       relationId,
       studentId,
+      email,
+      address,
     } = data;
 
     if (!mobile) {
@@ -91,21 +97,21 @@ export class RegisterService {
       throw new BadRequestException('Profile not found');
     }
 
+    const updateData: any = {};
+
+    if (parentName) updateData.parentName = parentName;
+    if (studentFullName) updateData.studentFullName = studentFullName;
+    if (classId) updateData.classId = new Types.ObjectId(classId);
+    if (schoolId) updateData.schoolId = new Types.ObjectId(schoolId);
+    if (relationId) updateData.relationId = new Types.ObjectId(relationId);
+    if (studentId) updateData.studentId = studentId;
+
+    // ✅ NEW FIELDS
+    if (email) updateData.email = email;
+    if (address) updateData.address = address;
+
     const updated = await this.registerModel
-      .findOneAndUpdate(
-        { mobile: normalizedPhone },
-        {
-          parentName,
-          studentFullName,
-          classId: classId ? new Types.ObjectId(classId) : existing.classId,
-          schoolId: schoolId ? new Types.ObjectId(schoolId) : existing.schoolId,
-          relationId: relationId
-            ? new Types.ObjectId(relationId)
-            : existing.relationId,
-          studentId,
-        },
-        { new: true },
-      )
+      .findOneAndUpdate({ mobile: normalizedPhone }, updateData, { new: true })
       .populate('classId', 'name')
       .populate('schoolId', 'name')
       .populate('relationId', 'name');
