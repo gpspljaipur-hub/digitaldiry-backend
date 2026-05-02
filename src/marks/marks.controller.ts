@@ -11,7 +11,11 @@ export class MarksController {
   }
 
   @Post('list')
-  get(@Body() body: any) {
-    return this.marksService.getMarks(body.classId, body.subjectId);
+  getMarks(@Body() body: any) {
+    return this.marksService.getMarks(
+      body.classId,
+      body.studentId,
+      body.subjectId,
+    );
   }
 }

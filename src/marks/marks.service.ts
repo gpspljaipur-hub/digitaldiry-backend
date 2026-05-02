@@ -45,18 +45,20 @@ export class MarksService {
       .populate('classId', 'name');
   }
 
-  async getMarks(classId: string, subjectId?: string) {
-    const filter: any = {
-      classId: new Types.ObjectId(classId),
-    };
-
-    if (subjectId) {
+  async getMarks(classId: string, studentId?: string, subjectId?: string) {
+    const filter: any = {};
+    if (classId && Types.ObjectId.isValid(classId)) {
+      filter.classId = new Types.ObjectId(classId);
+    }
+    if (studentId && Types.ObjectId.isValid(studentId)) {
+      filter.studentId = new Types.ObjectId(studentId);
+    }
+    if (subjectId && Types.ObjectId.isValid(subjectId)) {
       filter.subjectId = new Types.ObjectId(subjectId);
     }
-
     const result = await this.marksModel
       .find(filter)
-      .populate('studentId', 'name className')
+      .populate('studentId', 'name')
       .populate('subjectId', 'name')
       .populate('classId', 'name')
       .sort({ createdAt: -1 });

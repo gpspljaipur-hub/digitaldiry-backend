@@ -11,6 +11,21 @@ export class NoticeService {
   ) {}
 
   // ADD NOTICE
+  // async addNotice(data: any) {
+  //   const { title, classId, message, status } = data;
+
+  //   if (!title || !classId || !message) {
+  //     throw new BadRequestException('All fields required');
+  //   }
+
+  //   return this.noticeModel.create({
+  //     title,
+  //     classId: new Types.ObjectId(classId),
+  //     message,
+  //     status: status || 'normal',
+  //   });
+  // }
+
   async addNotice(data: any) {
     const { title, classId, message, status } = data;
 
@@ -18,9 +33,11 @@ export class NoticeService {
       throw new BadRequestException('All fields required');
     }
 
+    const classIds = classId.map((id: string) => new Types.ObjectId(id));
+
     return this.noticeModel.create({
       title,
-      classId: new Types.ObjectId(classId),
+      classId: classIds,
       message,
       status: status || 'normal',
     });

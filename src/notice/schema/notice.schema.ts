@@ -8,8 +8,8 @@ export class Notice {
   @Prop({ required: true })
   title!: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'ClassModel', required: true })
-  classId!: Types.ObjectId;
+  @Prop({ type: [Types.ObjectId], ref: 'ClassModel', required: true })
+  classId!: Types.ObjectId[];
 
   @Prop({ required: true })
   message!: string;

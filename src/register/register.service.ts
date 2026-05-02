@@ -105,8 +105,6 @@ export class RegisterService {
     if (schoolId) updateData.schoolId = new Types.ObjectId(schoolId);
     if (relationId) updateData.relationId = new Types.ObjectId(relationId);
     if (studentId) updateData.studentId = studentId;
-
-    // ✅ NEW FIELDS
     if (email) updateData.email = email;
     if (address) updateData.address = address;
 
