@@ -13,6 +13,11 @@ export class Complaint {
 
   @Prop({ default: 'pending' })
   status!: string;
+  @Prop({ type: Types.ObjectId, ref: 'ClassModel', required: true })
+  classId!: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Student', required: true })
+  studentId!: Types.ObjectId;
 }
 
 export const ComplaintSchema = SchemaFactory.createForClass(Complaint);

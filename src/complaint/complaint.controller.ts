@@ -14,4 +14,9 @@ export class ComplaintController {
   get() {
     return this.complaintService.getComplaints();
   }
+
+  @Post('student')
+  getStudentComplaints(@Body() body: any) {
+    return this.complaintService.getStudentComplaints(body);
+  }
 }
