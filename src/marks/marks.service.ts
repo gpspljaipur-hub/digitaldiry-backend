@@ -11,9 +11,9 @@ export class MarksService {
   ) {}
 
   async addMarks(data: any) {
-    const { classId, subjectId, students } = data;
+    const { classId, subjectId, examTypeId, students } = data;
 
-    if (!classId || !subjectId || !students?.length) {
+    if (!classId || !subjectId || !examTypeId || !students?.length) {
       throw new BadRequestException('All fields required');
     }
 
@@ -22,10 +22,12 @@ export class MarksService {
         filter: {
           studentId: new Types.ObjectId(student.studentId),
           subjectId: new Types.ObjectId(subjectId),
+          examTypeId: new Types.ObjectId(examTypeId),
         },
         update: {
           classId: new Types.ObjectId(classId),
           subjectId: new Types.ObjectId(subjectId),
+          examTypeId: new Types.ObjectId(examTypeId),
           studentId: new Types.ObjectId(student.studentId),
           marks: student.marks,
         },
@@ -39,13 +41,20 @@ export class MarksService {
       .find({
         classId: new Types.ObjectId(classId),
         subjectId: new Types.ObjectId(subjectId),
+        examTypeId: new Types.ObjectId(examTypeId),
       })
       .populate('studentId', 'name className')
       .populate('subjectId', 'name')
-      .populate('classId', 'name');
+      .populate('classId', 'name')
+      .populate('examTypeId', 'name');
   }
 
-  async getMarks(classId: string, studentId?: string, subjectId?: string) {
+  async getMarks(
+    classId: string,
+    studentId?: string,
+    subjectId?: string,
+    examTypeId?: string,
+  ) {
     const filter: any = {};
     if (classId && Types.ObjectId.isValid(classId)) {
       filter.classId = new Types.ObjectId(classId);
@@ -56,11 +65,16 @@ export class MarksService {
     if (subjectId && Types.ObjectId.isValid(subjectId)) {
       filter.subjectId = new Types.ObjectId(subjectId);
     }
+
+    if (examTypeId && Types.ObjectId.isValid(examTypeId)) {
+      filter.examTypeId = new Types.ObjectId(examTypeId);
+    }
     const result = await this.marksModel
       .find(filter)
       .populate('studentId', 'name')
       .populate('subjectId', 'name')
       .populate('classId', 'name')
+      .populate('examTypeId', 'name')
       .sort({ createdAt: -1 });
 
     return result;

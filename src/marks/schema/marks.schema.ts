@@ -10,7 +10,8 @@ export class Marks {
 
   @Prop({ type: Types.ObjectId, ref: 'Subject', required: true })
   subjectId!: Types.ObjectId;
-
+  @Prop({ type: Types.ObjectId, ref: 'ExamType', required: true })
+  examTypeId!: Types.ObjectId;
   @Prop({ type: Types.ObjectId, ref: 'Student', required: true })
   studentId!: Types.ObjectId;
 
