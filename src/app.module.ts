@@ -18,6 +18,7 @@ import { LeaveModule } from './leave/leave.module';
 import { ComplaintCategoryModule } from './complaint-category/complaint-category.module';
 import { ComplaintModule } from './complaint/complaint.module';
 import { SchoolAdminModule } from './school-admin/school-admin.module';
+import { ExamTypeModule } from './examType/examType.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { SchoolAdminModule } from './school-admin/school-admin.module';
     ComplaintCategoryModule,
     ComplaintModule,
     SchoolAdminModule,
+    ExamTypeModule,
   ],
 })
 export class AppModule {}
